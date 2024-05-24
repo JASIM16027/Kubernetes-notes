@@ -1,164 +1,141 @@
-# Kubernetes-notes
+# Kubernetes Notes
+
+Here's an organized guide to installing and managing Minikube on x86-64 Linux, including starting your cluster, deploying applications, and managing your Minikube clusters:
+
+### Step 1: Install Minikube
+
+1. **Download the latest Minikube release:**
+
+   ```sh
+   curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+   ```
+
+2. **Install Minikube and clean up:**
+
+   ```sh
+   sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+   ```
+
+### Step 2: Start Your Cluster
+
+1. **Start Minikube:**
+
+   From a terminal with administrator access (but not logged in as root), run:
+
+   ```sh
+   minikube start
+   ```
+
+2. **Troubleshooting:**
+
+   If Minikube fails to start, refer to the [drivers page](https://minikube.sigs.k8s.io/docs/drivers/) for help setting up a compatible container or virtual-machine manager.
+
+### Step 3: Interact with Your Cluster
+
+1. **Access with kubectl:**
+
+   If you already have `kubectl` installed:
+
+   ```sh
+   kubectl get po -A
+   ```
+
+   Alternatively, minikube can download the appropriate version of kubectl and you should be able to use it like this:
+
+   ```sh
+   minikube kubectl -- get po -A
+   ```
+
+2. **Add an alias for convenience:**
+
+   You can also make your life easier by adding the following to your shell config: ( (e.g., `~/.bashrc`, `~/.zshrc`):
+
+   ```sh
+   alias kubectl="minikube kubectl --"
+   ```
+
+ Initially, some services such as the storage-provisioner, may not yet be in a Running state. This is a normal condition during cluster bring-up, and will resolve itself momentarily. For additional insight into your cluster state, minikube bundles the Kubernetes Dashboard, allowing you to get easily acclimated to your new environment:
 
 
-Here's how to convert the provided commands into Ubuntu-compatible commands:
+4. **Open the Kubernetes Dashboard:**
 
-1. **Update package lists and install dependencies:**
+   ```sh
+   minikube dashboard
+   ```
 
-```sh
-sudo apt-get update
-sudo apt-get install -y curl apt-transport-https
-```
+### Step 4: Deploy Applications
 
-2. **Install kubectl:**
+1. **Create a sample deployment and expose it on port 8080:**
 
-```sh
-# Download the latest release of kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   ```sh
+   kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
+   kubectl expose deployment hello-minikube --type=NodePort --port=8080
+   ```
 
-# Make the kubectl binary executable
-chmod +x kubectl
+3. **Check the service:**
 
-# Move the binary into your PATH
-sudo mv kubectl /usr/local/bin/
-```
+   It may take a moment for the deployment to show up:
 
-3. **Install Minikube:**
+   ```sh
+   kubectl get services hello-minikube
+   ```
 
-```sh
-# Download the latest release of Minikube
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+4. **Access the service:**
 
-# Make the Minikube binary executable
-chmod +x minikube-linux-amd64
+ The easiest way to access this service is to let minikube launch a web browser for you:
 
-# Move the binary into your PATH
-sudo mv minikube-linux-amd64 /usr/local/bin/minikube
-```
+   ```sh
+   minikube service hello-minikube
+   ```
 
-4. **Install Hyperkit (Optional):**
-Hyperkit is not available for Linux, it's primarily for macOS. For Linux, Minikube usually uses drivers like Docker, KVM, or VirtualBox. We'll use Docker here.
+  Alternatively, use kubectl to forward the port:
 
-5. **Start Minikube using Docker:**
+   ```sh
+   kubectl port-forward service/hello-minikube 7080:8080
+   ```
 
-```sh
-# Start Minikube with the Docker driver
-minikube start --driver=docker
-```
+   Access your application at [http://localhost:7080/](http://localhost:7080/).
 
-6. **Verify the installation:**
+### Step 5: Manage Your Cluster
 
-```sh
-# Check kubectl version
-kubectl version --client
+1. **Pause Kubernetes without impacting deployed applications:**
 
-# Check Minikube version
-minikube version
+   ```sh
+   minikube pause
+   ```
 
-# Check Minikube status
-minikube status
-```
+2. **Unpause the instance:**
 
-7. **Create Minikube cluster with Docker driver:**
+   ```sh
+   minikube unpause
+   ```
 
-```sh
-minikube start --driver=docker
-kubectl get nodes
-minikube status
-kubectl version
-```
+3. **Halt the cluster:**
 
-8. **Delete cluster and restart in debug mode:**
+   ```sh
+   minikube stop
+   ```
 
-```sh
-minikube delete
-minikube start --driver=docker --v=7 --alsologtostderr
-minikube status
-```
+4. **Change the default memory limit (requires a restart):**
 
-9. **kubectl commands:**
+   ```sh
+   minikube config set memory 9001
+   ```
 
-```sh
-# List nodes
-kubectl get nodes
+5. **Browse the catalog of easily installed Kubernetes services:**
 
-# List pods
-kubectl get pod
+   ```sh
+   minikube addons list
+   ```
 
-# List services
-kubectl get services
+6. **Create a second cluster with an older Kubernetes release:**
 
-# Create an nginx deployment
-kubectl create deployment nginx-depl --image=nginx
+   ```sh
+   minikube start -p aged --kubernetes-version=v1.16.1
+   ```
 
-# List deployments
-kubectl get deployment
+7. **Delete all Minikube clusters:**
 
-# List replicasets
-kubectl get replicaset
-
-# Edit the nginx deployment
-kubectl edit deployment nginx-depl
-```
-
-10. **Debugging:**
-
-```sh
-# Get logs from a pod
-kubectl logs {pod-name}
-
-# Execute a command in a pod
-kubectl exec -it {pod-name} -- bin/bash
-```
-
-11. **Create MongoDB deployment:**
-
-```sh
-# Create a MongoDB deployment
-kubectl create deployment mongo-depl --image=mongo
-
-# Get logs from the MongoDB pod
-kubectl logs mongo-depl-{pod-name}
-
-# Describe the MongoDB pod
-kubectl describe pod mongo-depl-{pod-name}
-```
-
-12. **Delete deployments:**
-
-```sh
-kubectl delete deployment mongo-depl
-kubectl delete deployment nginx-depl
-```
-
-13. **Create or edit a config file:**
-
-```sh
-# Edit or create the nginx-deployment.yaml file
-vim nginx-deployment.yaml
-
-# Apply the configuration
-kubectl apply -f nginx-deployment.yaml
-
-# List pods
-kubectl get pod
-
-# List deployments
-kubectl get deployment
-```
-
-14. **Delete resources using a config file:**
-
-```sh
-kubectl delete -f nginx-deployment.yaml
-```
-
-15. **Metrics:**
-
-For metrics, you need to have metrics-server installed in your cluster. Once it's set up, you can use the following command:
-
-```sh
-# View metrics for nodes and pods
-kubectl top nodes
-kubectl top pods
-```
+   ```sh
+   minikube delete --all
+   ```
