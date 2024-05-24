@@ -1,5 +1,5 @@
 
-# Kubernetes Notes: Installing and Managing Minikube on x86-64 Linux
+# Kubernetes Notes:
 
 ## Step 1: Install Minikube
 
