@@ -1,5 +1,5 @@
 
-# Kubernetes Notes:
+# Kubernetes Notes
 
 ## Step 1: Install Minikube
 
@@ -196,6 +196,30 @@
    ```sh
    kubectl apply -f nginx-deployment.yaml
    ```
+  ```sh
+  nginx-deployment.yaml:
+  
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: nginx-depl
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: nginx
+      template:
+        metadata:
+          labels:
+            app: nginx
+        spec:
+          containers:
+          - name: nginx
+            image: nginx:latest
+            ports:
+            - containerPort: 80
+
+  ```
 
 3. **List pods and deployments:**
    ```sh
@@ -324,3 +348,8 @@ Here's an organized guide to installing and managing Minikube on x86-64 Linux, i
     minikube delete
    ```
   
+
+
+
+
+
