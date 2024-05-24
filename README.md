@@ -139,3 +139,117 @@ Here's an organized guide to installing and managing Minikube on x86-64 Linux, i
    ```sh
    minikube delete --all
    ```
+
+8. **Verify the installation:**
+
+```sh
+# Check kubectl version
+kubectl version --client
+
+# Check Minikube version
+minikube version
+
+# Check Minikube status
+minikube status
+```
+
+
+```sh
+kubectl get nodes
+kubectl version
+```
+
+9. **Delete cluster and status **
+
+```sh
+minikube delete
+minikube status
+```
+
+10. **kubectl commands:**
+
+```sh
+# List nodes
+kubectl get nodes
+
+# List pods
+kubectl get pod
+
+# List services
+kubectl get services
+
+# Create an nginx deployment
+kubectl create deployment nginx-depl --image=nginx
+
+# List deployments
+kubectl get deployment
+
+# List replicasets
+kubectl get replicaset
+
+# Edit the nginx deployment
+kubectl edit deployment nginx-depl
+```
+
+11. **Debugging:**
+
+```sh
+# Get logs from a pod
+kubectl logs {pod-name}
+
+# Execute a command in a pod
+kubectl exec -it {pod-name} -- bin/bash
+```
+
+12. **Create MongoDB deployment:**
+
+```sh
+# Create a MongoDB deployment
+kubectl create deployment mongo-depl --image=mongo
+
+# Get logs from the MongoDB pod
+kubectl logs mongo-depl-{pod-name}
+
+# Describe the MongoDB pod
+kubectl describe pod mongo-depl-{pod-name}
+```
+
+13. **Delete deployments:**
+
+```sh
+kubectl delete deployment mongo-depl
+kubectl delete deployment nginx-depl
+```
+
+14. **Create or edit a config file:**
+
+```sh
+# Edit or create the nginx-deployment.yaml file
+vim nginx-deployment.yaml
+
+# Apply the configuration
+kubectl apply -f nginx-deployment.yaml
+
+# List pods
+kubectl get pod
+
+# List deployments
+kubectl get deployment
+```
+
+14. **Delete resources using a config file:**
+
+```sh
+kubectl delete -f nginx-deployment.yaml
+```
+
+14. **Metrics:**
+
+For metrics, you need to have metrics-server installed in your cluster. Once it's set up, you can use the following command:
+
+```sh
+# View metrics for nodes and pods
+kubectl top nodes
+kubectl top pods
+```
+
