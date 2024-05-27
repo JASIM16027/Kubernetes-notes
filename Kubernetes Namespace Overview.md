@@ -54,7 +54,7 @@ kubectl apply -f namespace.yaml
 
 ### Create Components in Namespaces
 
-When creating resources such as Pods, Services, Deployments, etc., you can specify the namespace in the YAML configuration:
+When creating resources such as Pods, Services, Deployments, etc., we can specify the namespace in the YAML configuration:
 
 ```yaml
 apiVersion: v1
@@ -82,7 +82,7 @@ kubectl create deployment my-deployment --image=my-image --namespace=my-namespac
 
 ### Change Active Namespace
 
-To change the active namespace for your `kubectl` context, use the following command:
+To change the active namespace for our `kubectl` context, use the following command:
 
 ```sh
 kubectl config set-context --current --namespace=<namespace-name>
@@ -164,7 +164,7 @@ spec:
 
 **Breakdown:**
 
-- **apiVersion**: Specifies the version of the Kubernetes API you’re using for the Deployment. Here it is `apps/v1`.
+- **apiVersion**: Specifies the version of the Kubernetes API we’re using for the Deployment. Here it is `apps/v1`.
 - **kind**: The type of Kubernetes resource. Here it is `Deployment`.
 - **metadata**:
   - **name**: The name of the Deployment.
