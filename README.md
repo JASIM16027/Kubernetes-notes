@@ -794,10 +794,19 @@ spec:
    ```
 
 
+---
 
-Let's break down each diagram in detail, as if they were in two separate chapters, to clarify their concepts, advantages, limitations, and use cases. 
 
 ---
+
+### **What is Kubernetes?**  
+A platform for managing and running multiple containers over multiple different machines.
+
+### **Why use Kubernetes?**  
+ When you need to run many different containers with different images( unique images). 
+ 
+---
+
 
 ## Chapter 1: Elastic Beanstalk Scaling Strategy
 
